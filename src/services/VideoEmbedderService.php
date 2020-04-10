@@ -36,20 +36,14 @@ class VideoEmbedderService extends Component
     public function getInfo($url)
     {
 		// use oembed if vimeo
-		if ($this->isVimeo($url) && !$this->isOembed($url)) {
+		/*if ($this->isVimeo($url) && !$this->isOembed($url)) {
 			$url = 'https://vimeo.com/api/oembed.json?url='.$url;
 		}
 		
-		try {
-			$response = Embed::create($url, [
-				'choose_bigger_image' => true,
-				'parameters' => [],
-			]);
-		} 
-		catch (Exception $e) 
-		{
-			$response = null;
-		}
+		$response = Embed::create($url, [
+            'choose_bigger_image' => true,
+            'parameters' => [],
+		]);
 		
 		if ($this->isVimeo($url) && $this->isOembed($url)) {
 			$data = json_decode($response->response->getContent());
@@ -58,7 +52,7 @@ class VideoEmbedderService extends Component
 			return $data;
 		}
 
-		return $response;
+		return $response;*/
     }
 
 
@@ -69,7 +63,9 @@ class VideoEmbedderService extends Component
      */
     public function isVideo($url)
     {
-        return ($this->getInfo($url)->type == 'video');
+		return $this->isYouTube($url) || $this->isVimeo($url);
+		
+		return ($this->getInfo($url)->type == 'video');
     }
 
     /**
@@ -145,7 +141,19 @@ class VideoEmbedderService extends Component
     }
 
 
-
+	public function getParams($params)
+	{
+		$parameters = '?';
+		$i = 0;
+		foreach ($params as $k=>$v) {
+			if (($parameters !== null) && ($i !== 0)) {
+				$parameters .= '&';
+			}
+			$parameters .= "{$k}={$v}";
+			$i++;
+		}
+		return $parameters;
+	}
 
     /**
      * Take a url and return the embed code
@@ -155,8 +163,11 @@ class VideoEmbedderService extends Component
      */
     public function embed( $url, $params = [] ) : string
     {
-        try {
-            $code = $this->getInfo($url)->code;
+		$src = $this->getEmbedUrl($url, $params);
+		return "<iframe src='$src' frameborder='0' allowfullscreen='true' allowscriptaccess='true'></iframe>";
+		
+		/*try {
+            //$code = $this->getInfo($url)->code;
 
             // check if theree are any parameters passed along
             if (!empty($params)) {
@@ -235,7 +246,7 @@ class VideoEmbedderService extends Component
         {
             // If the URL is invalid (because it's 404ing out or whatever) just return an empty string.
             return '';
-        }
+        }*/
 
     }
 
@@ -250,7 +261,21 @@ class VideoEmbedderService extends Component
     public function getEmbedUrl($url, $params = [] )
     {
 
-        try {
+		$parameters = $this->getParams($params);
+
+		if ($this->isYouTube($url)) {
+			$id = $this->getYouTubeId($url);
+
+			return '//www.youtube.com/embed/' . $id . $parameters;
+		}
+		
+		if ($this->isVimeo($url)) {
+			$id = $this->getVimeoId($url);
+
+			return '//player.vimeo.com/video/' . $id . $parameters;
+		}
+
+        /*try {
 
             // looks like there are, now let's only do this for YouTube and Vimeo
             if($this->getInfo($url)->type == 'video' && ($this->isYouTube($url) || $this->isVimeo($url)))
@@ -293,7 +318,7 @@ class VideoEmbedderService extends Component
         {
             // If the URL is invalid (because it's 404ing out or whatever) just return an empty string.
             return '';
-        }
+        }*/
 
     }
 
@@ -307,7 +332,18 @@ class VideoEmbedderService extends Component
      */
     public function getVideoId($url)
     {
-        // looks like there are, now let's only do this for YouTube and Vimeo
+
+		if ($this->isYouTube($url)) {
+			return $this->getYouTubeId($url);
+		}
+
+		if ($this->isVimeo($url)) {
+			return $this->getVimeoId($url);
+		}
+
+		return '';
+
+        /*// looks like there are, now let's only do this for YouTube and Vimeo
         if($this->getInfo($url)->type == 'video' && ($this->isYouTube($url) || $this->isVimeo($url)))
         {
             if ($this->isYouTube($url))
@@ -323,7 +359,7 @@ class VideoEmbedderService extends Component
         {
             // return empty string
             return '';
-        }
+        }*/
     }
 
 
@@ -334,7 +370,19 @@ class VideoEmbedderService extends Component
      * 
     **/
     public function getVideoThumbnail($url) {
-        // check for vimeo, I don't like the way Embed returns the Vimeo thumbnail
+
+		if ($this->isYouTube($url)) {
+			$id = $this->getYouTubeId($url);
+			return "https://i.ytimg.com/vi/$id/hqdefault.jpg";
+		}
+
+		if ($this->isVimeo($url)) {
+			$id = $this->getVimeoId($url);
+			return "https://i.vimeocdn.com/video/".$id."_480x360.webp";
+		}
+		
+
+		/*// check for vimeo, I don't like the way Embed returns the Vimeo thumbnail
         if($this->getInfo($url)->type == 'video' && $this->isVimeo($url))
         {
             $id = $this->getVimeoId($url);
@@ -359,7 +407,9 @@ class VideoEmbedderService extends Component
             {
                 return '';
             }
-        }
+		}*/
+		
+		return '';
     }
 
     private function cleanUrl($url) {
