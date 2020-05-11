@@ -125,8 +125,8 @@ class VideoEmbedderService extends Component
      */
     public function getYouTubeId($url)
     {
-        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
-        return $match[1];
+		preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
+        return $match[1] ?? null;
     }
 
     /**
@@ -137,7 +137,7 @@ class VideoEmbedderService extends Component
     public function getVimeoId($url)
     {
         preg_match('%^https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)(?:[?]?.*)$%im', $url, $matches);
-        return $matches[3];
+        return $matches[3] ?? null;
     }
 
 
