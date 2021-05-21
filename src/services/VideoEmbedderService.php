@@ -412,6 +412,18 @@ class VideoEmbedderService extends Component
 		return '';
     }
 
+    public function getProviderName($url)
+    {
+        if ($this->isVideo($url)) {
+            if ($this->isYouTube($url)) {
+                return 'youtube';
+            } elseif ($this->isVimeo($url)) {
+                return 'vimeo';
+            }
+        }
+        return null;
+    }
+
     private function cleanUrl($url) {
         $stripped = preg_replace( '/^https?:/', '', $url );
         return $stripped;
