@@ -31,9 +31,9 @@ class VideoEmbedderVariable
      * @param string $url
      * @return string
      */
-    public function embed($url, $params = [])
+    public function embed($url, $params = [], $attributes = [])
     {
-        return Template::raw(VideoEmbedder::$plugin->service->embed($url, $params));
+        return Template::raw(VideoEmbedder::$plugin->service->embed($url, $params, $attributes));
     }
 
     /**

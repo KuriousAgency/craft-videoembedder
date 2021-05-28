@@ -15,6 +15,7 @@ use mikestecker\videoembedder\VideoEmbedder;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Html;
 
 use DOMDocument;
 use Embed\Embed;
@@ -161,10 +162,11 @@ class VideoEmbedderService extends Component
      * @param string $url
      * @return string
      */
-    public function embed( $url, $params = [] ) : string
+    public function embed( $url, $params = [], $attributes = []) : string
     {
 		$src = $this->getEmbedUrl($url, $params);
-		return "<iframe src='$src' frameborder='0' allowfullscreen='true' allowscriptaccess='true'></iframe>";
+        $attributes['src'] = $src;
+		return Html::tag('iframe','',$attributes);
 		
 		/*try {
             //$code = $this->getInfo($url)->code;
