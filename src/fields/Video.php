@@ -47,9 +47,6 @@ class Video extends Field implements PreviewableFieldInterface
         return Craft::t('video-embedder', 'Video');
     }
 
-    /**
-     * @return string
-     */
     public function getContentColumnType(): string
     {
         return Schema::TYPE_TEXT;
@@ -60,10 +57,10 @@ class Video extends Field implements PreviewableFieldInterface
      *
      * @return string
      * @throws \yii\base\Exception
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \RuntimeException
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate(
             'video-embedder/VideoField/settings',
@@ -73,36 +70,30 @@ class Video extends Field implements PreviewableFieldInterface
         );
     }
 
-    /**
-     * @return array
-     */
     public function rules(): array
     {
         $rules = parent::rules();
-        $rules = array_merge(
+
+        return array_merge(
             $rules,
             []
         );
-
-        return $rules;
     }
 
     /**
-     * @param mixed $value
      * @param ElementInterface|null $element
      * @return mixed|EmbedModel
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         return $value;
     }
 
     /**
-     * @param mixed $value
      * @param ElementInterface|null $element
      * @return array|mixed|null|string
      */
-    public function serializeValue($value, ElementInterface $element = null)
+    public function serializeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         return $value;
     }
@@ -110,18 +101,16 @@ class Video extends Field implements PreviewableFieldInterface
     /**
      * Returns the field’s input HTML.
      *
-     * @param mixed $value
      * @param ElementInterface|null $element
-     * @return string
      * @throws \yii\base\InvalidParamException
      * @throws \yii\base\Exception
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \RuntimeException
      * @throws \yii\base\InvalidConfigException
      */
     public function getInputHtml(
-        $value,
-        ElementInterface $element = null
+        mixed $value,
+        ?\craft\base\ElementInterface $element = null
     ): string {
 
         // Register our asset bundle
@@ -167,31 +156,21 @@ class Video extends Field implements PreviewableFieldInterface
 
     public function getElementValidationRules(): array
     {
-        $rules = parent::getElementValidationRules();
-
-        return $rules;
+        return parent::getElementValidationRules();
     }
 
-    /**
-     * @param mixed $value
-     * @param ElementInterface $element
-     * @return string
-     */
-    public function getSearchKeywords($value, ElementInterface $element): string
+    public function getSearchKeywords(mixed $value, ElementInterface $element): string
     {
-        return json_encode($this);
+        return json_encode($this, JSON_THROW_ON_ERROR);
     }
 
     /**
-     * @param mixed $value
-     * @param ElementInterface $element
-     * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
     public function getTableAttributeHtml(
-        $value,
+        mixed $value,
         ElementInterface $element
     ): string {
 
@@ -211,12 +190,11 @@ class Video extends Field implements PreviewableFieldInterface
      * Returns whether the given value should be considered “empty” to a validator.
      *
      * @param mixed $value The field’s value
-     * @param ElementInterface $element
      *
      * @return bool Whether the value should be considered “empty”
      * @see Validator::$isEmpty
      */
-    public function isValueEmpty($value, ElementInterface $element = null): bool
+    public function isValueEmpty(mixed $value, ElementInterface $element = null): bool
     {
         return parent::isValueEmpty($value, $element);
     }

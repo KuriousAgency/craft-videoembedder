@@ -32,20 +32,19 @@ class VideoEmbedderService extends Component
     /**
      * Tap the Embed library
      * @param string $url
-     * @return boolean
      */
-    public function getInfo($url)
+    public function getInfo($url): void
     {
 		// use oembed if vimeo
 		/*if ($this->isVimeo($url) && !$this->isOembed($url)) {
 			$url = 'https://vimeo.com/api/oembed.json?url='.$url;
 		}
-		
+
 		$response = Embed::create($url, [
             'choose_bigger_image' => true,
             'parameters' => [],
 		]);
-		
+
 		if ($this->isVimeo($url) && $this->isOembed($url)) {
 			$data = json_decode($response->response->getContent());
 			$data->aspectRatio = $data->width / $data->height;
@@ -60,63 +59,55 @@ class VideoEmbedderService extends Component
     /**
      * Determine whether the url is a youtube or vimeo url
      * @param string $url
-     * @return boolean
      */
-    public function isVideo($url)
+    public function isVideo($url): bool
     {
 		return $this->isYouTube($url) || $this->isVimeo($url);
-		
-		return ($this->getInfo($url)->type == 'video');
     }
 
     /**
      * Is the url a youtube url
      * @param string $url
-     * @return boolean
      */
-    public function isYouTube($url)
+    public function isYouTube($url): bool
     {
-        return (strpos($url, 'youtube.com/') !== false || strpos($url, 'youtu.be/') !== false);
+        return (str_contains($url, 'youtube.com/') || str_contains($url, 'youtu.be/'));
     }
 
     /**
      * Is the url a vimeo url
      * @param string $url
-     * @return boolean
      */
-    public function isVimeo($url)
+    public function isVimeo($url): bool
     {
-        return strpos($url, 'vimeo.com/') !== FALSE;
+        return str_contains($url, 'vimeo.com/');
     }
 
     /**
      * Is the url a wistia url
      * @param string $url
-     * @return boolean
      */
-    public function isWistia($url)
+    public function isWistia($url): bool
     {
-        return strpos($url, 'wistia.com/') !== FALSE;
+        return str_contains($url, 'wistia.com/');
     }
 
     /**
      * Is the url a Viddler url
      * @param string $url
-     * @return boolean
      */
-    public function isViddler($url)
+    public function isViddler($url): bool
     {
-        return strpos($url, 'viddler.com/') !== FALSE;
+        return str_contains($url, 'viddler.com/');
 	}
 	
 	/**
      * Is the url using oEmbed format
      * @param string $url
-     * @return boolean
      */
-    public function isOembed($url)
+    public function isOembed($url): bool
     {
-        return strpos($url, 'oembed.json?') !== FALSE;
+        return str_contains($url, 'oembed.json?');
 	}
 
     /**
@@ -142,7 +133,7 @@ class VideoEmbedderService extends Component
     }
 
 
-	public function getParams($params)
+	public function getParams($params): string
 	{
 		$parameters = '?';
 		$i = 0;
@@ -150,9 +141,11 @@ class VideoEmbedderService extends Component
 			if (($parameters !== null) && ($i !== 0)) {
 				$parameters .= '&';
 			}
-			$parameters .= "{$k}={$v}";
-			$i++;
+
+			$parameters .= sprintf('%s=%s', $k, $v);
+			++$i;
 		}
+
 		return $parameters;
 	}
 
@@ -160,14 +153,13 @@ class VideoEmbedderService extends Component
      * Take a url and return the embed code
      *
      * @param string $url
-     * @return string
      */
-    public function embed( $url, $params = [], $attributes = []) : string
+    public function embed( $url, $params = [], array $attributes = []) : string
     {
 		$src = $this->getEmbedUrl($url, $params);
         $attributes['src'] = $src;
 		return Html::tag('iframe','',$attributes);
-		
+
 		/*try {
             //$code = $this->getInfo($url)->code;
 
@@ -270,7 +262,7 @@ class VideoEmbedderService extends Component
 
 			return '//www.youtube.com/embed/' . $id . $parameters;
 		}
-		
+
 		if ($this->isVimeo($url)) {
 			$id = $this->getVimeoId($url);
 
@@ -283,10 +275,10 @@ class VideoEmbedderService extends Component
             if($this->getInfo($url)->type == 'video' && ($this->isYouTube($url) || $this->isVimeo($url)))
             {
                 $parameters = '';
-    
+
                 // check if theree are any parameters passed along
                 if (!empty($params)) {
-                    
+
                     $parameters .= '?';
                     $i = 0;
                     foreach ($params as $k=>$v) {
@@ -297,15 +289,15 @@ class VideoEmbedderService extends Component
                         $i++;
                     }
                 }
-                
+
                 if ($this->isYouTube($url)) {
                     $id = $this->getYouTubeId($url);
-        
+
                     $embedUrl = '//www.youtube.com/embed/' . $id . $parameters;
                     return $embedUrl;
                 } else if ($this->isVimeo($url)) {
                     $id = $this->getVimeoId($url);
-        
+
                     $embedUrl = '//player.vimeo.com/video/' . $id . $parameters;
                     return $embedUrl;
                 }
@@ -371,11 +363,11 @@ class VideoEmbedderService extends Component
      * @return - string
      * 
     **/
-    public function getVideoThumbnail($url) {
+    public function getVideoThumbnail($url): string {
 
 		if ($this->isYouTube($url)) {
 			$id = $this->getYouTubeId($url);
-			return "https://i.ytimg.com/vi/$id/hqdefault.jpg";
+			return sprintf('https://i.ytimg.com/vi/%s/hqdefault.jpg', $id);
 		}
 
 		if ($this->isVimeo($url)) {
@@ -414,7 +406,7 @@ class VideoEmbedderService extends Component
 		return '';
     }
 
-    public function getProviderName($url)
+    public function getProviderName($url): ?string
     {
         if ($this->isVideo($url)) {
             if ($this->isYouTube($url)) {
@@ -423,12 +415,11 @@ class VideoEmbedderService extends Component
                 return 'vimeo';
             }
         }
+
         return null;
     }
 
-    private function cleanUrl($url) {
-        $stripped = preg_replace( '/^https?:/', '', $url );
-        return $stripped;
-    }
-    
+    // private function cleanUrl($url): string|array|null {
+    //     return preg_replace( '/^https?:/', '', $url );
+    // }    
 }

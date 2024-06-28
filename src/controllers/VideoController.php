@@ -25,14 +25,12 @@ class VideoController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = [];
+    protected array|int|bool $allowAnonymous = [];
 
     // Public Methods
     // =========================================================================
-
     /**
-     * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
     public function actionParse(): string

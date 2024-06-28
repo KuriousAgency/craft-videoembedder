@@ -31,7 +31,7 @@ class VideoEmbedderVariable
      * @param string $url
      * @return string
      */
-    public function embed($url, $params = [], $attributes = [])
+    public function embed($url, $params = [], $attributes = []): \Twig\Markup
     {
         return Template::raw(VideoEmbedder::$plugin->service->embed($url, $params, $attributes));
     }
@@ -42,7 +42,7 @@ class VideoEmbedderVariable
      * @param string $url
      * @return string
      */
-    public function getEmbedUrl($url, $params = [])
+    public function getEmbedUrl($url, $params = []): \Twig\Markup
     {
         return Template::raw(VideoEmbedder::$plugin->service->getEmbedUrl($url, $params));
     }
@@ -54,7 +54,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getVideoThumbnail($url) {
+    public function getVideoThumbnail($url): \Twig\Markup {
         return Template::raw(VideoEmbedder::$plugin->service->getVideoThumbnail($url));
     }
 
@@ -65,7 +65,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getTitle($url) {
+    public function getTitle($url): void {
 		//return Template::raw(VideoEmbedder::$plugin->service->getInfo($url)->title);
     }
 
@@ -76,7 +76,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getDescription($url) {
+    public function getDescription($url): void {
         //return Template::raw(VideoEmbedder::$plugin->service->getInfo($url)->description);
     }
 
@@ -87,7 +87,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getType($url) {
+    public function getType($url): void {
         //return Template::raw(VideoEmbedder::$plugin->service->getInfo($url)->type);
     }
 
@@ -98,7 +98,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getAspectRatio($url) {
+    public function getAspectRatio($url): void {
         //return Template::raw(VideoEmbedder::$plugin->service->getInfo($url)->aspectRatio);
     }
 
@@ -109,7 +109,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getProviderName($url) {
+    public function getProviderName($url): \Twig\Markup {
 
         return Template::raw(VideoEmbedder::$plugin->service->getProviderName($url));
     }
@@ -121,7 +121,7 @@ class VideoEmbedderVariable
      * @todo - do some real world testing. 
      * 
     **/
-    public function getVideoId($url) {
+    public function getVideoId($url): \Twig\Markup {
         return Template::raw(VideoEmbedder::$plugin->service->getVideoId($url));
     }
 
