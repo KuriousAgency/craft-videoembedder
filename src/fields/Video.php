@@ -81,7 +81,6 @@ class Video extends Field implements PreviewableFieldInterface
     }
 
     /**
-     * @param ElementInterface|null $element
      * @return mixed|EmbedModel
      */
     public function normalizeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
@@ -90,7 +89,6 @@ class Video extends Field implements PreviewableFieldInterface
     }
 
     /**
-     * @param ElementInterface|null $element
      * @return array|mixed|null|string
      */
     public function serializeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
@@ -101,7 +99,6 @@ class Video extends Field implements PreviewableFieldInterface
     /**
      * Returns the field’s input HTML.
      *
-     * @param ElementInterface|null $element
      * @throws \yii\base\InvalidParamException
      * @throws \yii\base\Exception
      * @throws \Twig\Error\LoaderError
@@ -169,7 +166,7 @@ class Video extends Field implements PreviewableFieldInterface
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function getTableAttributeHtml(
+    public function getPreviewHtml(
         mixed $value,
         ElementInterface $element
     ): string {

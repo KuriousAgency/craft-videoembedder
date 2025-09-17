@@ -100,7 +100,7 @@ class VideoEmbedderService extends Component
     {
         return str_contains($url, 'viddler.com/');
 	}
-	
+
 	/**
      * Is the url using oEmbed format
      * @param string $url
@@ -138,7 +138,7 @@ class VideoEmbedderService extends Component
 		$parameters = '?';
 		$i = 0;
 		foreach ($params as $k=>$v) {
-			if (($parameters !== null) && ($i !== 0)) {
+			if ($i !== 0) {
 				$parameters .= '&';
 			}
 
@@ -252,7 +252,7 @@ class VideoEmbedderService extends Component
      * @param string $url
      * @return string
      */
-    public function getEmbedUrl($url, $params = [] )
+    public function getEmbedUrl($url, $params = [] ): ?string
     {
 
 		$parameters = $this->getParams($params);
@@ -313,6 +313,7 @@ class VideoEmbedderService extends Component
             // If the URL is invalid (because it's 404ing out or whatever) just return an empty string.
             return '';
         }*/
+        return null;
 
     }
 
@@ -374,25 +375,25 @@ class VideoEmbedderService extends Component
 			$id = $this->getVimeoId($url);
 			return "https://i.vimeocdn.com/video/".$id."_480x360.webp";
 		}
-		
+
 
 		/*// check for vimeo, I don't like the way Embed returns the Vimeo thumbnail
         if($this->getInfo($url)->type == 'video' && $this->isVimeo($url))
         {
             $id = $this->getVimeoId($url);
-            
+
             $data = file_get_contents("http://vimeo.com/api/v2/video/$id.json");
             $data = json_decode($data);
-            
+
             $image = $this->cleanUrl($data[0]->thumbnail_large);
-            
+
             return $image;
         }
         else
         {
             // not vimeo, use Embed
             $image = $this->cleanUrl($this->getInfo($url)->image);
-            
+
             // Check if anything exists
             if (!empty($image)) {
                 return $image;
@@ -402,7 +403,7 @@ class VideoEmbedderService extends Component
                 return '';
             }
 		}*/
-		
+
 		return '';
     }
 
