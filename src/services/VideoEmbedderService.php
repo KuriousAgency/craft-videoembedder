@@ -10,7 +10,6 @@
 
 namespace mikestecker\videoembedder\services;
 
-use Embed\Exceptions\InvalidUrlException;
 use mikestecker\videoembedder\VideoEmbedder;
 
 use Craft;
@@ -18,7 +17,6 @@ use craft\base\Component;
 use craft\helpers\Html;
 
 use DOMDocument;
-use Embed\Embed;
 
 /**
  * @author    Mike Stecker
